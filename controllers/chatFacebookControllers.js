@@ -61,7 +61,7 @@ const getWebHook = (req, res) => {
 
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
-  const firstname=await getUsersName(sender_psid)
+  // const firstname=await getUsersName(sender_psid)
   let response;
 
   // Check if the message contains text
@@ -69,7 +69,7 @@ async function handleMessage(sender_psid, received_message) {
 
     // Create the payload for a basic text message
     response = {
-      "text": `Hi there ${firstname}".`
+      "text": `Hi there, welcome to match bot.`
     }
   }  
   
