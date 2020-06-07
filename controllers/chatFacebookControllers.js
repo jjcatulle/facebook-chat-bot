@@ -108,7 +108,7 @@ async function getUsersName(sender_id){
   const res=`https://graph.facebook.com/v2.6/${sender_id}?fields=first_name,last_name&access_token=EAAJ2ZANfsHtMBAGUMOL3TXBDocSpktawy37BqtKdUxtNKehamQauqvmjjiqxMuJAv237ZBzLUiAwRmutOK31isMSKfZAZAx2DB83v5ZB6fZAtBJPNU7WqZAMyvZBOfYIeZB5UzPQNmle1aceYdlT0Ft1md1fgVRkAa1XrSPOhUl86zAZDZD`
  return request(res, function (error, response, body) {
    const data=JSON.parse(body);
-  return res.first_name
+  return data.first_name
 });
 }
 getUsersName('3180773751967961')
