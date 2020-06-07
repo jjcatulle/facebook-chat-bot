@@ -59,7 +59,8 @@ const getWebHook = (req, res) => {
 };
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+async function handleMessage(sender_psid, received_message) {
+  const firstname=await getUsersName(sender_psid)
   let response;
 
   // Check if the message contains text
@@ -67,7 +68,7 @@ function handleMessage(sender_psid, received_message) {
 
     // Create the payload for a basic text message
     response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an image!`
+      "text": `Hi there ${firstname}".`
     }
   }  
   
@@ -103,6 +104,11 @@ function callSendAPI(sender_psid, response) {
     }); 
 }
 
+async function getUsersName(sender_id){
+  const res=await request.get(`https://graph.facebook.com/v2.6/${sender_id}?fields=first_name,last_name&access_token=EAAJ2ZANfsHtMBAGUMOL3TXBDocSpktawy37BqtKdUxtNKehamQauqvmjjiqxMuJAv237ZBzLUiAwRmutOK31isMSKfZAZAx2DB83v5ZB6fZAtBJPNU7WqZAMyvZBOfYIeZB5UzPQNmle1aceYdlT0Ft1md1fgVRkAa1XrSPOhUl86zAZDZD`);
+  const parjson=JSON.parse(res);
+  return parjson.first_name;
+}
 module.exports = {
   postWebHook,
   getWebHook,
