@@ -1,5 +1,6 @@
 require("dotenv").config();
 const request=require('request');
+var rp = require('request-promise');
 
 const postWebHook = (req, res) => {
   let body = req.body;
@@ -106,12 +107,22 @@ function callSendAPI(sender_psid, response) {
 
 async function getUsersName(sender_id){
   const res=`https://graph.facebook.com/v2.6/${sender_id}?fields=first_name,last_name&access_token=EAAJ2ZANfsHtMBAGUMOL3TXBDocSpktawy37BqtKdUxtNKehamQauqvmjjiqxMuJAv237ZBzLUiAwRmutOK31isMSKfZAZAx2DB83v5ZB6fZAtBJPNU7WqZAMyvZBOfYIeZB5UzPQNmle1aceYdlT0Ft1md1fgVRkAa1XrSPOhUl86zAZDZD`
- return request(res, function (error, response, body) {
-   const data=JSON.parse(body);
-  return data.first_name
-});
+  var options = {
+    uri: res,
+    json: true // Automatically parses the JSON string in the response
+};
+ 
+rp(options)
+    .then(function (data) {
+        console.log(data.first_name);
+        return data.first_name;
+    })
+    .catch(function (err) {
+      console.log(err)
+        // API call failed...
+    });
 }
-getUsersName('3180773751967961')
+
 module.exports = {
   postWebHook,
   getWebHook,
