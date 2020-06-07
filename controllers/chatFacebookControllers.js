@@ -106,7 +106,7 @@ function callSendAPI(sender_psid, response) {
 
 async function getUsersName(sender_id){
   const res=await request.get(`https://graph.facebook.com/v2.6/${sender_id}?fields=first_name,last_name&access_token=EAAJ2ZANfsHtMBAGUMOL3TXBDocSpktawy37BqtKdUxtNKehamQauqvmjjiqxMuJAv237ZBzLUiAwRmutOK31isMSKfZAZAx2DB83v5ZB6fZAtBJPNU7WqZAMyvZBOfYIeZB5UzPQNmle1aceYdlT0Ft1md1fgVRkAa1XrSPOhUl86zAZDZD`);
-  console.log('data'+res)
+  console.log(res)
   return res.first_name;
 }
 module.exports = {
