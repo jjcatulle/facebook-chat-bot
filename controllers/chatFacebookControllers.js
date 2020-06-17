@@ -16,10 +16,9 @@ const postWebHook = (req, res) => {
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
+      
       console.log('Sender PSID: ' + sender_psid);
 
-      // Check if the event is a message or postback and
-      // pass the event to the appropriate handler function
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
@@ -68,9 +67,10 @@ async function handleMessage(sender_psid, received_message) {
   if (received_message.text) {    
 
     // Create the payload for a basic text message
-    response = {
-      "text": `Hi there, welcome to match bot.`
-    }
+    // response = {
+    //   "text": `Hi there, welcome to match bot.`
+    // }
+   await getAnswer(received_message.text,response);
   }  
   
   // Sends the response message
@@ -105,24 +105,35 @@ function callSendAPI(sender_psid, response) {
     }); 
 }
 
-async function getUsersName(sender_id){
-  const res=`https://graph.facebook.com/v2.6/${sender_id}?fields=first_name,last_name&access_token=EAAJ2ZANfsHtMBAGUMOL3TXBDocSpktawy37BqtKdUxtNKehamQauqvmjjiqxMuJAv237ZBzLUiAwRmutOK31isMSKfZAZAx2DB83v5ZB6fZAtBJPNU7WqZAMyvZBOfYIeZB5UzPQNmle1aceYdlT0Ft1md1fgVRkAa1XrSPOhUl86zAZDZD`
+async function getAnswer(question,callback) {
   var options = {
-    uri: res,
-    json: true // Automatically parses the JSON string in the response
-};
- 
-rp(options)
-    .then(function (data) {
-        console.log(data.first_name);
-        return data.first_name;
-    })
-    .catch(function (err) {
-      console.log(err)
-        // API call failed...
-    });
+    method: 'GET',
+    url: 'https://webknox-question-answering.p.rapidapi.com/questions/answers',
+    qs: {
+      answerLookup: 'true',
+      answerSearch: 'true',
+      question: `${question}%3F`
+    },
+    headers: {
+      'x-rapidapi-host': 'webknox-question-answering.p.rapidapi.com',
+      'x-rapidapi-key': 'e3a785bf7bmsh0eb6aac86fbfd9bp1e2d2fjsne056aa82a9bc',
+      useQueryString: true
+    }
+  };
+  
+  await request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+    const resp=JSON.parse(body);
+    callback = {
+      "text": resp.answer;
+    }
+    console.log(resp.answer);
+    return null;
+  });
+
 }
 
+getAnswer()
 module.exports = {
   postWebHook,
   getWebHook,
