@@ -105,32 +105,22 @@ function callSendAPI(sender_psid, response) {
     }); 
 }
 
-async function getAnswer(question,callback) {
+function getAnswer(question,callback){
+  let parsedQ= question.split('question')[1].split('?')[0].replace(' ','+');
   var options = {
-    method: 'GET',
-    url: 'https://webknox-question-answering.p.rapidapi.com/questions/answers',
-    qs: {
-      answerLookup: 'true',
-      answerSearch: 'true',
-      question: `${question}%3F`
-    },
-    headers: {
-      'x-rapidapi-host': 'webknox-question-answering.p.rapidapi.com',
-      'x-rapidapi-key': 'e3a785bf7bmsh0eb6aac86fbfd9bp1e2d2fjsne056aa82a9bc',
-      useQueryString: true
-    }
-  };
-  
-  await request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-    const resp=JSON.parse(body);
-    callback = {
-      "text": resp.answer;
-    }
-    console.log(resp.answer);
-    return null;
-  });
-
+   'method': 'GET',
+   'url': `http://api.wolframalpha.com/v1/result?appid=EVG8WL-8E2AYWE8UX&i=${parsedQ}%3f`,
+ };
+ request(options, function (error, response) {
+   if (error){
+       callback = {
+           "text": 'answer not found, if you would like human help, start your question with "human" '
+         }
+   }
+   callback = {
+       "text": response.body
+     }
+ });
 }
 
 getAnswer()
