@@ -109,7 +109,7 @@ function getAnswer(question,callback){
   let parsedQ= question.split('question')[1].split('?')[0].replace(' ','+');
   var options = {
    'method': 'GET',
-   'url': `http://api.wolframalpha.com/v1/result?appid=EVG8WL-8E2AYWE8UX&i=${parsedQ}%3f`,
+   'url': `http://api.wolframalpha.com/v1/result?appid=&i=${parsedQ}%3f`,
  };
  request(options, function (error, response) {
    if (error){
